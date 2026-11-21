@@ -221,3 +221,34 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# BDA Project - Dataset exclusions
+datasets/raw/*
+datasets/processed/*
+
+# Keep dataset directories in Git
+!datasets/raw/.gitkeep
+!datasets/processed/.gitkeep
+
+# Model files
+*.pkl
+*.joblib
+*.h5
+*.keras
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment and secrets
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+
+# Temporary files
+*.tmp
+*.bak
