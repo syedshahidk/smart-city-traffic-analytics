@@ -1,0 +1,29 @@
+
+# Data Processing
+pandas
+numpy
+
+# Big Data Processing
+pyspark
+
+# Real-Time Data Streaming
+kafka-python
+
+# Machine Learning
+scikit-learn
+
+# Backend API
+fastapi
+uvicorn
+psycopg2-binary
+
+# Dashboard and Visualization
+streamlit
+plotly
+
+# Utilities
+python-dotenv
+requests
+
+# Testing
+pytest
