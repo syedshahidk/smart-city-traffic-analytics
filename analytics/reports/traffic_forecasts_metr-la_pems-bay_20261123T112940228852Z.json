@@ -1,0 +1,32 @@
+[
+  {
+    "dataset": "metr-la",
+    "forecast_origin": "2012-06-27T23:55:00+00:00",
+    "target_timestamp": "2012-06-28T00:10:00+00:00",
+    "prediction_horizon_minutes": 15,
+    "predicted_average_speed": 61.222691894793336,
+    "predicted_congestion_percentage": 3.3816425120772946,
+    "congestion_status": "not_congested",
+    "congestion_threshold_speed_below": 20.0,
+    "selected_models": {
+      "speed": "persistence",
+      "congestion_percentage": "persistence"
+    },
+    "model_artifact": "models/traffic_forecasting/metr-la/model_20261123T112833179040Z.joblib"
+  },
+  {
+    "dataset": "pems-bay",
+    "forecast_origin": "2017-06-30T23:55:00+00:00",
+    "target_timestamp": "2017-07-01T00:10:00+00:00",
+    "prediction_horizon_minutes": 15,
+    "predicted_average_speed": 66.88530179945056,
+    "predicted_congestion_percentage": 0.007165961490854504,
+    "congestion_status": "not_congested",
+    "congestion_threshold_speed_below": 20.0,
+    "selected_models": {
+      "speed": "random_forest",
+      "congestion_percentage": "hist_gradient_boosting"
+    },
+    "model_artifact": "models/traffic_forecasting/pems-bay/model_20261123T112842809156Z.joblib"
+  }
+]

@@ -1,0 +1,14 @@
+services:
+  ml:
+    image: smart-city-traffic-analytics-ml:local
+    build:
+      context: .
+      dockerfile: Dockerfile.ml
+    working_dir: /workspace
+    init: true
+    network_mode: none
+    volumes:
+      - type: bind
+        source: .
+        target: /workspace
+    command: ["python", "-m", "pytest", "-q", "tests/test_forecasting.py"]

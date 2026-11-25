@@ -1,0 +1,11 @@
+services:
+  dashboard:
+    image: smart-city-traffic-dashboard:local
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://127.0.0.1:8000}
+    ports:
+      - "127.0.0.1:8080:8080"
+    restart: unless-stopped

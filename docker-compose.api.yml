@@ -1,0 +1,42 @@
+﻿services:
+  api:
+    image: smart-city-traffic-analytics-api:local
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    working_dir: /app
+    init: true
+    restart: unless-stopped
+    command: ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      API_DB_HOST: ${API_DB_HOST:-postgres}
+      API_DB_PORT: ${API_DB_PORT:-5432}
+      API_DB_NAME: ${API_DB_NAME:-traffic_analytics}
+      API_DB_USER: ${API_DB_USER:-traffic_api_reader}
+      API_DB_PASSWORD: ${API_DB_PASSWORD:-}
+      API_DB_POOL_MIN: ${API_DB_POOL_MIN:-1}
+      API_DB_POOL_MAX: ${API_DB_POOL_MAX:-5}
+      API_DB_STATEMENT_TIMEOUT_MS: ${API_DB_STATEMENT_TIMEOUT_MS:-8000}
+      API_MAX_QUERY_RANGE_DAYS: ${API_MAX_QUERY_RANGE_DAYS:-366}
+      API_FORECAST_MAX_INPUT_AGE_SECONDS: ${API_FORECAST_MAX_INPUT_AGE_SECONDS:-1200}
+      API_CORS_ORIGINS: ${API_CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173,http://localhost:8080,http://127.0.0.1:8080}
+      API_MODEL_DIR: /app/models/traffic_forecasting
+      API_MODEL_REPORTS_DIR: /app/analytics/reports
+    volumes:
+      - type: bind
+        source: ./models/traffic_forecasting
+        target: /app/models/traffic_forecasting
+        read_only: true
+      - type: bind
+        source: ./analytics/reports
+        target: /app/analytics/reports
+        read_only: true
+    networks:
+      - existing-traffic
+
+networks:
+  existing-traffic:
+    external: true
+    name: smart-city-traffic-analytics_default

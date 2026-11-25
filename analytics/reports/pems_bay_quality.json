@@ -1,0 +1,23 @@
+{
+    "quality_report": {
+        "dataset": "PEMS-BAY",
+        "rows": 52116,
+        "sensors": 325,
+        "total_measurements": 16937700,
+        "missing_values": 0,
+        "infinite_values": 0,
+        "zero_readings": 521,
+        "negative_readings": 0,
+        "all_sensor_zero_timestamps": 0,
+        "zero_percentage": 0.0031,
+        "start_timestamp": "2017-01-01 00:00:00+00:00",
+        "end_timestamp": "2017-06-30 23:55:00+00:00"
+    },
+    "network_wide_zero_periods": [],
+    "cleaning_policy": {
+        "missing_values": "Preserved as missing",
+        "infinite_values": "Converted to missing",
+        "negative_values": "Converted to missing",
+        "zero_values": "Preserved and flagged for investigation"
+    }
+}

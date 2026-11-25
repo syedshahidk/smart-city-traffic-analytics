@@ -231,6 +231,11 @@ datasets/processed/*
 !datasets/raw/.gitkeep
 !datasets/processed/.gitkeep
 
+# Dashboard build artifacts
+/dashboard/node_modules/
+/dashboard/dist/
+/dashboard/*.tsbuildinfo
+
 # Model files
 *.pkl
 *.joblib
@@ -252,3 +257,21 @@ datasets/processed/*
 # Temporary files
 *.tmp
 *.bak
+
+# Traffic datasets (download separately)
+datasets/raw/*.h5
+datasets/processed/*
+!datasets/processed/.gitkeep
+
+# Spark streaming checkpoints
+storage/checkpoints/*
+!storage/checkpoints/.gitkeep
+
+# All Node.js dependencies
+**/node_modules/
+
+# All frontend build outputs
+**/dist/
+
+# Python virtual environments
+.venv/

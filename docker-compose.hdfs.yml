@@ -1,0 +1,61 @@
+services:
+  namenode:
+    image: apache/hadoop:3.5.0
+    container_name: traffic-hdfs-namenode
+    hostname: namenode
+    command: ["bash", "-lc", "exec hdfs namenode"]
+    restart: unless-stopped
+    mem_limit: 1g
+    cpus: 1.0
+    environment:
+      HDFS_NAMENODE_OPTS: "-Xms256m -Xmx512m"
+    volumes:
+      - type: bind
+        source: ./stream_processing/hadoop-conf/core-site.xml
+        target: /opt/hadoop/etc/hadoop/core-site.xml
+        read_only: true
+      - type: bind
+        source: ./stream_processing/hadoop-conf/hdfs-site.xml
+        target: /opt/hadoop/etc/hadoop/hdfs-site.xml
+        read_only: true
+      - type: volume
+        source: hdfs_namenode_data
+        target: /tmp
+    networks:
+      - existing-traffic
+
+  datanode:
+    image: apache/hadoop:3.5.0
+    container_name: traffic-hdfs-datanode
+    hostname: datanode
+    command: ["bash", "-lc", "exec hdfs datanode"]
+    restart: unless-stopped
+    mem_limit: 1g
+    cpus: 1.0
+    environment:
+      HDFS_DATANODE_OPTS: "-Xms256m -Xmx512m"
+    volumes:
+      - type: bind
+        source: ./stream_processing/hadoop-conf/core-site.xml
+        target: /opt/hadoop/etc/hadoop/core-site.xml
+        read_only: true
+      - type: bind
+        source: ./stream_processing/hadoop-conf/hdfs-site.xml
+        target: /opt/hadoop/etc/hadoop/hdfs-site.xml
+        read_only: true
+      - type: volume
+        source: hdfs_datanode_data
+        target: /tmp
+    networks:
+      - existing-traffic
+
+networks:
+  existing-traffic:
+    external: true
+    name: smart-city-traffic-analytics_default
+
+volumes:
+  hdfs_namenode_data:
+    name: smart-city-traffic-analytics_hdfs_namenode
+  hdfs_datanode_data:
+    name: smart-city-traffic-analytics_hdfs_datanode

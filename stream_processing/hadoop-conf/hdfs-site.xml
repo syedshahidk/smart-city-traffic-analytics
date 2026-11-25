@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>dfs.replication</name>
+    <value>1</value>
+    <description>One DataNode is used for this local demonstration.</description>
+  </property>
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:///tmp/hdfs/name</value>
+  </property>
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>file:///tmp/hdfs/data</value>
+  </property>
+  <property>
+    <name>dfs.namenode.rpc-address</name>
+    <value>namenode:8020</value>
+  </property>
+  <property>
+    <name>dfs.datanode.hostname</name>
+    <value>datanode</value>
+    <description>Advertise a Docker DNS name reachable by Spark on the shared network.</description>
+  </property>
+  <property>
+    <name>dfs.client.use.datanode.hostname</name>
+    <value>true</value>
+    <description>Resolve the DataNode's advertised hostname from clients on the Docker network.</description>
+  </property>
+  <property>
+    <name>dfs.datanode.use.datanode.hostname</name>
+    <value>true</value>
+  </property>
+</configuration>

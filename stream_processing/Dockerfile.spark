@@ -1,0 +1,8 @@
+FROM apache/spark:4.0.0
+
+# psycopg2-binary is already declared in the project requirements. Install it
+# into an isolated path at build time, then keep the image's non-root runtime user.
+USER root
+RUN python3 -m pip install --no-cache-dir --target=/opt/python-deps psycopg2-binary
+ENV PYTHONPATH=/opt/python-deps:${PYTHONPATH}
+USER spark

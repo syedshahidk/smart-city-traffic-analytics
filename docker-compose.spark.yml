@@ -1,0 +1,83 @@
+services:
+  spark-streaming:
+    image: smart-city-traffic-analytics-spark:4.0.0
+    build:
+      context: ./stream_processing
+      dockerfile: Dockerfile.spark
+    container_name: traffic-spark-streaming
+    working_dir: /opt/project
+    init: true
+    restart: "no"
+    stop_signal: SIGINT
+    stop_grace_period: 60s
+    ports:
+      - "127.0.0.1:${SPARK_READINESS_PORT:-8081}:8081"
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8081/health/ready', timeout=2)"
+      interval: 5s
+      timeout: 3s
+      start_period: 20s
+      retries: 60
+    mem_limit: 2g
+    cpus: 2.0
+    tmpfs:
+      - /tmp/.ivy2.5.2:mode=1777,size=256m
+    volumes:
+      - type: bind
+        source: .
+        target: /opt/project
+      - type: bind
+        source: ./stream_processing/hadoop-conf/core-site.xml
+        target: /opt/spark/conf/core-site.xml
+        read_only: true
+      - type: bind
+        source: ./stream_processing/hadoop-conf/hdfs-site.xml
+        target: /opt/spark/conf/hdfs-site.xml
+        read_only: true
+    command:
+      - /opt/spark/bin/spark-submit
+      - --master
+      - "local[2]"
+      - --driver-memory
+      - 1g
+      - --conf
+      - spark.jars.ivy=/tmp/.ivy2.5.2
+      - --packages
+      - org.apache.spark:spark-sql-kafka-0-10_2.13:4.0.0
+      - /opt/project/stream_processing/traffic_stream.py
+      - --dataset
+      - ${SPARK_DATASET:-metr-la}
+      - --bootstrap-servers
+      - kafka:9092
+      - --topic
+      - traffic-events
+      - --starting-offsets
+      - ${SPARK_STARTING_OFFSETS:-latest}
+      - --max-offsets-per-trigger
+      - ${SPARK_MAX_OFFSETS_PER_TRIGGER:-10}
+      - --threshold
+      - ${SPARK_CONGESTION_THRESHOLD:-20.0}
+      - --checkpoint-dir
+      - /opt/project/storage/checkpoints/spark_deduplicated_v2
+      - --readiness-host
+      - 0.0.0.0
+      - --readiness-port
+      - "8081"
+    environment:
+      HADOOP_CONF_DIR: /opt/spark/conf
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "${POSTGRES_DB:?Load PostgreSQL settings from docker-compose.yml}"
+      POSTGRES_USER: "${POSTGRES_USER:?Load PostgreSQL settings from docker-compose.yml}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?Load PostgreSQL settings from docker-compose.yml}"
+    networks:
+      - existing-traffic
+
+networks:
+  existing-traffic:
+    external: true
+    name: smart-city-traffic-analytics_default

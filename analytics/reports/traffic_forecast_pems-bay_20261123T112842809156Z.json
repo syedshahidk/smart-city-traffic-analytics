@@ -1,0 +1,151 @@
+{
+  "dataset": "pems-bay",
+  "model_version": "20261123T112842809156Z",
+  "model_artifact": "models/traffic_forecasting/pems-bay/model_20261123T112842809156Z.joblib",
+  "created_at_utc": "2026-11-23T11:29:00.807374+00:00",
+  "prediction_horizon_minutes": 15,
+  "threshold_speed_below": 20.0,
+  "congestion_status_logic": "congested when predicted network average speed is below the existing sensor speed threshold; otherwise not_congested",
+  "feature_definitions": {
+    "speed_lag_0": "value at the prediction time",
+    "speed_lag_1": "value exactly 5 minutes before prediction time",
+    "speed_lag_2": "value exactly 10 minutes before prediction time",
+    "speed_lag_3": "value exactly 15 minutes before prediction time",
+    "speed_lag_6": "value exactly 30 minutes before prediction time",
+    "speed_lag_12": "value exactly 60 minutes before prediction time",
+    "congestion_percentage_lag_0": "value at the prediction time",
+    "congestion_percentage_lag_1": "value exactly 5 minutes before prediction time",
+    "congestion_percentage_lag_2": "value exactly 10 minutes before prediction time",
+    "congestion_percentage_lag_3": "value exactly 15 minutes before prediction time",
+    "congestion_percentage_lag_6": "value exactly 30 minutes before prediction time",
+    "congestion_percentage_lag_12": "value exactly 60 minutes before prediction time",
+    "speed_past_15m_mean": "mean over the preceding 3 valid five-minute grid slots, ending before prediction time",
+    "speed_past_15m_std": "std over the preceding 3 valid five-minute grid slots, ending before prediction time",
+    "speed_past_30m_mean": "mean over the preceding 6 valid five-minute grid slots, ending before prediction time",
+    "speed_past_30m_std": "std over the preceding 6 valid five-minute grid slots, ending before prediction time",
+    "speed_past_60m_mean": "mean over the preceding 12 valid five-minute grid slots, ending before prediction time",
+    "speed_past_60m_std": "std over the preceding 12 valid five-minute grid slots, ending before prediction time",
+    "congestion_percentage_past_15m_mean": "mean over the preceding 3 valid five-minute grid slots, ending before prediction time",
+    "congestion_percentage_past_15m_std": "std over the preceding 3 valid five-minute grid slots, ending before prediction time",
+    "congestion_percentage_past_30m_mean": "mean over the preceding 6 valid five-minute grid slots, ending before prediction time",
+    "congestion_percentage_past_30m_std": "std over the preceding 6 valid five-minute grid slots, ending before prediction time",
+    "congestion_percentage_past_60m_mean": "mean over the preceding 12 valid five-minute grid slots, ending before prediction time",
+    "congestion_percentage_past_60m_std": "std over the preceding 12 valid five-minute grid slots, ending before prediction time",
+    "time_of_day_sin": "sine of UTC minute-of-day angle at prediction time",
+    "time_of_day_cos": "cosine of UTC minute-of-day angle at prediction time",
+    "day_of_week_sin": "sine of UTC weekday angle at prediction time",
+    "day_of_week_cos": "cosine of UTC weekday angle at prediction time"
+  },
+  "model_configurations": {
+    "persistence": {
+      "rule": "use the metric observed at the forecast origin"
+    },
+    "random_forest": {
+      "n_estimators": 160,
+      "max_features": 0.8,
+      "min_samples_leaf": 2,
+      "n_jobs": -1,
+      "random_state": 42
+    },
+    "hist_gradient_boosting": {
+      "max_iter": 160,
+      "learning_rate": 0.08,
+      "max_leaf_nodes": 15,
+      "l2_regularization": 1.0,
+      "random_state": 42
+    }
+  },
+  "chronological_split": {
+    "train_target_start": "2017-01-01T01:15:00+00:00",
+    "train_target_end": "2017-05-07T16:40:00+00:00",
+    "validation_target_start": "2017-05-07T16:45:00+00:00",
+    "validation_target_end": "2017-06-03T20:15:00+00:00",
+    "test_target_start": "2017-06-03T20:20:00+00:00",
+    "test_target_end": "2017-06-30T23:55:00+00:00",
+    "validation_boundary": "2017-05-07T16:45:00+00:00",
+    "test_boundary": "2017-06-03T20:20:00+00:00"
+  },
+  "sample_counts": {
+    "train": 36447,
+    "validation": 7819,
+    "test": 7820,
+    "usable_total": 52086,
+    "grid_rows_without_complete_features_and_target": 42
+  },
+  "data_quality": {
+    "dataset": "pems-bay",
+    "source_file": "/workspace/datasets/processed/pems_bay_cleaned.csv",
+    "source_rows": 52116,
+    "sensor_count": 325,
+    "invalid_timestamps_excluded": 0,
+    "off_grid_timestamps_excluded": 0,
+    "missing_readings": 0,
+    "non_numeric_readings_excluded": 0,
+    "infinite_readings_excluded": 0,
+    "negative_readings_excluded": 0,
+    "zero_readings_preserved": 521,
+    "rows_without_valid_readings": 0,
+    "threshold_speed_below": 20.0,
+    "interval_minutes": 5,
+    "network_metric_timestamps": 52116,
+    "start_timestamp": "2017-01-01T00:00:00+00:00",
+    "end_timestamp": "2017-06-30T23:55:00+00:00",
+    "threshold_definition": "a valid sensor speed strictly below threshold is congested",
+    "zero_policy": "zero is valid, included in averages/counts, and congested below threshold",
+    "null_policy": "null, non-numeric, infinite, and negative speeds are excluded"
+  },
+  "models": {
+    "speed": {
+      "validation_comparison": {
+        "persistence": {
+          "mae": 0.5861126447411145,
+          "rmse": 1.0110495573818339,
+          "r2": 0.9647908501467255
+        },
+        "random_forest": {
+          "mae": 0.2808301945339618,
+          "rmse": 0.5175407737914072,
+          "r2": 0.9907742901102987
+        },
+        "hist_gradient_boosting": {
+          "mae": 0.2942117929710487,
+          "rmse": 0.5251789075340426,
+          "r2": 0.9904999650511206
+        }
+      },
+      "selected_model": "random_forest",
+      "test_metrics": {
+        "mae": 0.28069067751661037,
+        "rmse": 0.6534211029530086,
+        "r2": 0.9849801943199062
+      },
+      "test_sample_count": 7820
+    },
+    "congestion_percentage": {
+      "validation_comparison": {
+        "persistence": {
+          "mae": 0.32449555815715175,
+          "rmse": 0.9686807644235103,
+          "r2": 0.8463932959410406
+        },
+        "random_forest": {
+          "mae": 0.22971223708057434,
+          "rmse": 0.6791020190992136,
+          "r2": 0.924504883024397
+        },
+        "hist_gradient_boosting": {
+          "mae": 0.22512971922479966,
+          "rmse": 0.661282453245136,
+          "r2": 0.9284148701373287
+        }
+      },
+      "selected_model": "hist_gradient_boosting",
+      "test_metrics": {
+        "mae": 0.23244341260552004,
+        "rmse": 0.8914277313160913,
+        "r2": 0.8667645939494959
+      },
+      "test_sample_count": 7820
+    }
+  }
+}
