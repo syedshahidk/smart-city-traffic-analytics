@@ -848,55 +848,58 @@ function App() {
 
           {/* Section 3: Predictive Intelligence */}
           {section === 'forecasting' && (
-            <ForecastSection
-              dataset={activeDataset}
-              forecast={forecast}
-              state={forecastState}
-              error={forecastError}
-              metadata={selectedDataset ? modelMetadata[selectedDataset] ?? null : null}
-              metadataState={selectedDataset ? modelMetadataState[selectedDataset] ?? 'idle' : 'idle'}
-              metadataError={selectedDataset ? modelMetadataError[selectedDataset] ?? null : null}
-              onRetry={() => setForecastRetry((v) => v + 1)}
-            />
-            {/* Offline Model Evaluation Metrics Section */}
-            {selectedDataset && modelMetadata[selectedDataset] && (
-              <div className="mt-6 space-y-4">
-                <div className="bg-slate-950/80 border border-slate-700 rounded-lg p-4">
-                  <div className="text-[10px] font-bold font-mono text-cyan-400 tracking-wider uppercase">Speed Model Evaluation</div>
-                  <div className="text-xs text-slate-400 mt-2">
-                    <strong>Selected model:</strong> {modelMetadata[selectedDataset].speed.selected_model}<br />
-                    <strong>MAE:</strong> {modelMetadata[selectedDataset].speed.mae} mph — mean absolute error (offline test set)<br />
-                    <strong>R²:</strong> {modelMetadata[selectedDataset].speed.r2} — coefficient of determination (offline test set)<br />
-                    <strong>Test samples:</strong> {modelMetadata[selectedDataset].speed.test_samples} windows
+            <>
+              <ForecastSection
+                dataset={activeDataset}
+                forecast={forecast}
+                state={forecastState}
+                error={forecastError}
+                metadata={selectedDataset ? modelMetadata[selectedDataset] ?? null : null}
+                metadataState={selectedDataset ? modelMetadataState[selectedDataset] ?? 'idle' : 'idle'}
+                metadataError={selectedDataset ? modelMetadataError[selectedDataset] ?? null : null}
+                onRetry={() => setForecastRetry((v) => v + 1)}
+              />
+              {/* Offline Model Evaluation Metrics Section */}
+              {selectedDataset && modelMetadata[selectedDataset] && (
+                <div className="mt-6 space-y-4">
+                  <div className="bg-slate-950/80 border border-slate-700 rounded-lg p-4">
+                    <div className="text-[10px] font-bold font-mono text-cyan-400 tracking-wider uppercase">Speed Model Evaluation</div>
+                    <div className="text-xs text-slate-400 mt-2">
+                      <strong>Selected model:</strong> {modelMetadata[selectedDataset].speed.selected_model}<br />
+                      <strong>MAE:</strong> {modelMetadata[selectedDataset].speed.mae} mph — mean absolute error (offline test set)<br />
+                      <strong>R²:</strong> {modelMetadata[selectedDataset].speed.r2} — coefficient of determination (offline test set)<br />
+                      <strong>Test samples:</strong> {modelMetadata[selectedDataset].speed.test_samples} windows
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-950/80 border border-slate-700 rounded-lg p-4">
+                    <div className="text-[10px] font-bold font-mono text-amber-400 tracking-wider uppercase">Congestion Model Evaluation</div>
+                    <div className="text-xs text-slate-400 mt-2">
+                      <strong>Selected model:</strong> {modelMetadata[selectedDataset].congestion.selected_model}<br />
+                      <strong>MAE:</strong> {modelMetadata[selectedDataset].congestion.mae}% — mean absolute error in percentage points (offline test set)<br />
+                      <strong>R²:</strong> {modelMetadata[selectedDataset].congestion.r2} — coefficient of determination (offline test set)<br />
+                      <strong>Test samples:</strong> {modelMetadata[selectedDataset].congestion.test_samples} windows
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-950/80 border border-slate-700 rounded-lg p-4">
+                    <div className="text-[10px] font-bold font-mono text-emerald-400 tracking-wider uppercase">Model Training Information</div>
+                    <div className="text-xs text-slate-400 mt-2">
+                      <strong>Training samples:</strong> {modelMetadata[selectedDataset].training_samples} windows<br />
+                      <strong>Validation samples:</strong> {modelMetadata[selectedDataset].validation_samples} windows<br />
+                      <strong>Input features:</strong> {modelMetadata[selectedDataset].feature_count}<br />
+                      <strong>Model version:</strong> {modelMetadata[selectedDataset].model_version}<br />
+                      <strong>Prediction horizon:</strong> {modelMetadata[selectedDataset].prediction_horizon_minutes} minutes
+                    </div>
+                  </div>
+
+                  <div className="bg-rose-950/20 border border-rose-800/50 rounded-lg p-4 text-xs text-rose-300">
+                    <strong>Disclaimer:</strong> These are offline test evaluation metrics from historical dataset evaluation. They describe performance on a fixed test set and do not represent live prediction accuracy, prediction confidence, or guaranteed future performance. This project uses historical dataset replay with simulated streaming, not live real-world traffic.
                   </div>
                 </div>
-
-                <div className="bg-slate-950/80 border border-slate-700 rounded-lg p-4">
-                  <div className="text-[10px] font-bold font-mono text-amber-400 tracking-wider uppercase">Congestion Model Evaluation</div>
-                  <div className="text-xs text-slate-400 mt-2">
-                    <strong>Selected model:</strong> {modelMetadata[selectedDataset].congestion.selected_model}<br />
-                    <strong>MAE:</strong> {modelMetadata[selectedDataset].congestion.mae}% — mean absolute error in percentage points (offline test set)<br />
-                    <strong>R²:</strong> {modelMetadata[selectedDataset].congestion.r2} — coefficient of determination (offline test set)<br />
-                    <strong>Test samples:</strong> {modelMetadata[selectedDataset].congestion.test_samples} windows
-                  </div>
-                </div>
-
-                <div className="bg-slate-950/80 border border-slate-700 rounded-lg p-4">
-                  <div className="text-[10px] font-bold font-mono text-emerald-400 tracking-wider uppercase">Model Training Information</div>
-                  <div className="text-xs text-slate-400 mt-2">
-                    <strong>Training samples:</strong> {modelMetadata[selectedDataset].training_samples} windows<br />
-                    <strong>Validation samples:</strong> {modelMetadata[selectedDataset].validation_samples} windows<br />
-                    <strong>Input features:</strong> {modelMetadata[selectedDataset].feature_count}<br />
-                    <strong>Model version:</strong> {modelMetadata[selectedDataset].model_version}<br />
-                    <strong>Prediction horizon:</strong> {modelMetadata[selectedDataset].prediction_horizon_minutes} minutes
-                  </div>
-                </div>
-
-                <div className="bg-rose-950/20 border border-rose-800/50 rounded-lg p-4 text-xs text-rose-300">
-                  <strong>Disclaimer:</strong> These are offline test evaluation metrics from historical dataset evaluation. They describe performance on a fixed test set and do not represent live prediction accuracy, prediction confidence, or guaranteed future performance. This project uses historical dataset replay with simulated streaming, not live real-world traffic.
-                </div>
-              </div>
-            )}
+              )}
+            </>
+          )}
 
           {/* Section 4: Route Planner */}
           {section === 'route-planner' && (
